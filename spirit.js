@@ -21,7 +21,7 @@ const debug = true;
 const FRAX_FTM_POOL_PID =14;
 const GAST_COST = 1010000000;
 const GAS_LIMIT = 500000;
-const deadline = Math.floor(Date.now() / 1000) + 60 * 10; // 10 min
+
 
 console.log("staring.....")
 console.log("version ", version);
@@ -36,6 +36,7 @@ const compound = async() => {
     gas: GAS_LIMIT,
     gasPrice: GAST_COST
   };
+  const deadline = Math.floor(Date.now() / 1000) + 60 * 10; // 10 min
 
   console.log("--- STEP 1: harvesting ---");
   spiritBalanceBeforeHarvest = await spirit.methods.balanceOf(admin).call();
@@ -77,7 +78,7 @@ const compound = async() => {
 
 //compound();
 
-// compound every 5 minutes 
-cron.schedule("*/5 * * * *", function() {
+// compound every 10 minutes 
+cron.schedule("*/10 * * * *", function() {
   compound();
 });
