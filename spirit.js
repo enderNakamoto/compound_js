@@ -31,15 +31,17 @@ const compound = async() => {
   var bal = await web3.eth.getBalance(admin);
   console.log("initial ftm balance is ", bal/(10**18));
 
-  let transactionParams = {
+  const transactionParams = {
     from: admin,
     gas: GAS_LIMIT,
     gasPrice: GAST_COST
   };
 
   console.log("--- STEP 1: harvesting ---");
+  spiritBalanceBeforeHarvest = await spirit.methods.balanceOf(admin).call();
   await masterChef.methods.deposit(FRAX_FTM_POOL_PID, 0).send(transactionParams);
-  genkiDama = await spirit.methods.balanceOf(admin).call();
+  spiritBalanceAfterHarvest = await spirit.methods.balanceOf(admin).call();
+  genkiDama = spiritBalanceAfterHarvest - spiritBalanceBeforeHarvest;
   halfBalance = (genkiDama/2).toString();
 
   console.log("--- STEP 2: swapping half spirit to frax ---");
@@ -58,8 +60,12 @@ const compound = async() => {
   ftmHarvested = ftmBalanceAfterSwap - ftmBalanceBeforeSwap;
 
   console.log("--- STEP 4: adding liquidity ---");
-  value = {value : 1.01 * ftmHarvested} // just to be safe
-  let transactionParamsETH = Object.assign(transactionParams, value);
+  const transactionParamsETH =  {
+    from: admin,
+    gas: GAS_LIMIT,
+    gasPrice: GAST_COST,
+    value : ftmHarvested
+  };
   await router.methods.addLiquidityETH(addresses.FTM.frax, fraxHarvested, 0, 0, admin, deadline).send(transactionParamsETH);
   
   console.log('--- STEP 5: depositing lp back in pool');
@@ -69,9 +75,9 @@ const compound = async() => {
   console.log("---done---")
 }
 
-compound();
+//compound();
 
-// compound every 5 hours 
-// cron.schedule("* */5 * * *", function() {
-//   //compound();
-// });
+// compound every 5 minutes 
+cron.schedule("*/5 * * * *", function() {
+  compound();
+});
