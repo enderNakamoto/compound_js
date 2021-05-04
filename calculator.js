@@ -1,10 +1,10 @@
 const { plot } = require('nodeplotlib');
 
-const principle = 7000; 
-const starting_apr = 40147;
+const principle = 13000; 
+const starting_apr = 36653;
 //  if rate is 1% & compound_every_x_hr is 1, then 1% every hour and 24% per day
 const apr_rate_of_decay = 50; 
-const period_in_hours = 0.16;
+const period_in_hours = 0.083;
 const apr_floor = 300; 
 const days = 1;
 const deposit_fee_percentage = 1;
