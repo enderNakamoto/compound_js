@@ -20,7 +20,8 @@ const { address: admin } = web3.eth.accounts.wallet.add(process.env.FTM_ADMIN_PR
 const debug = true;
 const FRAX_FTM_POOL_PID =14;
 const GAST_COST = 1010000000;
-const deadline = Math.floor(Date.now() / 1000) + 60 * 5; // 5 min
+const GAS_LIMIT = 500000;
+const deadline = Math.floor(Date.now() / 1000) + 60 * 10; // 10 min
 
 console.log("staring.....")
 console.log("version ", version);
@@ -30,53 +31,41 @@ const compound = async() => {
   var bal = await web3.eth.getBalance(admin);
   console.log("initial ftm balance is ", bal/(10**18));
 
-  const transactionParams = {
+  let transactionParams = {
     from: admin,
-    gas: 500000,
+    gas: GAS_LIMIT,
     gasPrice: GAST_COST
   };
 
-  spiritBalance = await spirit.methods.balanceOf(admin).call();
-  console.log("spirit balance before harvest is", spiritBalance/(10**18));
-
   console.log("--- STEP 1: harvesting ---");
   await masterChef.methods.deposit(FRAX_FTM_POOL_PID, 0).send(transactionParams);
-
-  spiritBalance = await spirit.methods.balanceOf(admin).call();
-  console.log("spirit balance after harvest is", spiritBalance/(10**18));
-
-  halfBalance = (spiritBalance/2).toString();
+  genkiDama = await spirit.methods.balanceOf(admin).call();
+  halfBalance = (genkiDama/2).toString();
 
   console.log("--- STEP 2: swapping half spirit to frax ---");
-  // path = [addresses.FTM.spirit, addresses.FTM.wftm, addresses.FTM.frax];
-  // await router.methods.swapExactTokensForTokens(halfBalance, 0, path, admin, deadline).send(transactionParams);
-
-  fraxBalance = await frax.methods.balanceOf(admin).call();
-  console.log("frax balance is", fraxBalance/(10**18));
-
-  spiritBalance = await spirit.methods.balanceOf(admin).call();
-  console.log("spirit balance after swapping to frax is", spiritBalance/(10**18));
+  fraxBalanceBeforeSwap = await frax.methods.balanceOf(admin).call();
+  path = [addresses.FTM.spirit, addresses.FTM.wftm, addresses.FTM.frax];
+  await router.methods.swapExactTokensForTokens(halfBalance, 0, path, admin, deadline).send(transactionParams);
+  fraxBalanceAfterSwap = await frax.methods.balanceOf(admin).call();
+  fraxHarvested = fraxBalanceAfterSwap - fraxBalanceBeforeSwap;
 
   console.log("--- STEP 3: swapping half spirit to ftm ---");
-  // path = [addresses.FTM.spirit, addresses.FTM.wftm];
-  // await router.methods.swapExactTokensForETH(halfBalance, 0, path, admin, deadline).send(transactionParams);
+  ftmBalanceBeforeSwap = await web3.eth.getBalance(admin);
+  path = [addresses.FTM.spirit, addresses.FTM.wftm];
+  await router.methods.swapExactTokensForETH(halfBalance, 0, path, admin, deadline).send(transactionParams);
+  ftmBalanceAfterSwap = await web3.eth.getBalance(admin);
+  ftmHarvested = ftmBalanceAfterSwap - ftmBalanceBeforeSwap;
 
-  var ftmBalance = await web3.eth.getBalance(admin);
-  console.log("ftm balance is ", ftmBalance/(10**18));
-
-  spiritBalance = await spirit.methods.balanceOf(admin).call();
-  console.log("spirit balance after swapping to ftm is", spiritBalance/(10**18));
-
-  // console.log("--- STEP 4: adding liquidity ---");
-  // await router.methods.addLiquidityETH(addresses.FTM.frax, "20000000000000000000", 0, 0, admin, deadline).send(transactionParams);
+  console.log("--- STEP 4: adding liquidity ---");
+  value = {value : 1.02 * ftmHarvested} // just to be safe
+  let transactionParamsETH = Object.assign(transactionParams, value);
+  await router.methods.addLiquidityETH(addresses.FTM.frax, fraxHarvested, 0, 0, admin, deadline).send(transactionParamsETH);
   
+  console.log('--- STEP 5: depositing lp back in pool');
   lpBalance = await fraxFtmSpiritLp.methods.balanceOf(admin).call();
-  console.log("lp balance is ", lpBalance/(10**18));
-  
-  // console.log('-- STEP 5: depositing lp back in pool')
-  // await await masterChef.methods.deposit(FRAX_FTM_POOL_PID, lpBalance).send(transactionParams);
+  await await masterChef.methods.deposit(FRAX_FTM_POOL_PID, lpBalance).send(transactionParams);
 
-  // console.log("---done---")
+  console.log("---done---")
 }
 
 compound();

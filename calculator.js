@@ -4,7 +4,7 @@ const principle = 5000;
 const starting_apr = 10000;
 //  if rate is 1% & compound_every_x_hr is 1, then 1% every hour and 24% per day
 const apr_rate_of_decay = 10; 
-const period_in_hours = 1;
+const period_in_hours = 4;
 const apr_floor = 200; 
 const days = 8;
 const deposit_fee_percentage = 0;
