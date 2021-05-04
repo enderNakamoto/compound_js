@@ -48,6 +48,7 @@ const compound = async() => {
   await router.methods.swapExactTokensForTokens(halfBalance, 0, path, admin, deadline).send(transactionParams);
   fraxBalanceAfterSwap = await frax.methods.balanceOf(admin).call();
   fraxHarvested = fraxBalanceAfterSwap - fraxBalanceBeforeSwap;
+  fraxHarvested = fraxHarvested.toString();
 
   console.log("--- STEP 3: swapping half spirit to ftm ---");
   ftmBalanceBeforeSwap = await web3.eth.getBalance(admin);
@@ -57,7 +58,7 @@ const compound = async() => {
   ftmHarvested = ftmBalanceAfterSwap - ftmBalanceBeforeSwap;
 
   console.log("--- STEP 4: adding liquidity ---");
-  value = {value : 1.02 * ftmHarvested} // just to be safe
+  value = {value : 1.01 * ftmHarvested} // just to be safe
   let transactionParamsETH = Object.assign(transactionParams, value);
   await router.methods.addLiquidityETH(addresses.FTM.frax, fraxHarvested, 0, 0, admin, deadline).send(transactionParamsETH);
   
@@ -71,6 +72,6 @@ const compound = async() => {
 compound();
 
 // compound every 5 hours 
-cron.schedule("* */5 * * *", function() {
-  //compound();
-});
+// cron.schedule("* */5 * * *", function() {
+//   //compound();
+// });
