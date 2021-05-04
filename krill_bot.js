@@ -32,5 +32,17 @@ const debug = true;
 console.log("staring.....")
 debug && console.log('admin is ', admin);
 
+const masterChef = new web3.eth.Contract(abis.PolyWhaleMasterChef, addresses.MATIC.PolyWhaleMasterChef);
 
+cron.schedule("*/1 * * * *", function() {
+  doSomething();
+});
+
+
+// harvest 
+// swap 
+// deposit
+const singleSided = () => {
+  
+}
 
