@@ -78,7 +78,7 @@ const compound = async() => {
 }
 
 
-//compound every 20 minutes 
-cron.schedule("*/13 * * * *", function() {
+//compound every 10 minutes 
+cron.schedule("*/10 * * * *", function() {
   compound();
 });
