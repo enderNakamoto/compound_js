@@ -15,7 +15,9 @@ const addresses = {
     ori: '0x0575f8738efda7f512e3654f277c77e80c7d2725',
     oriFtmLp: '0x0433305ae161d28ed1408d11581610339dfc9be4',
     usdc: '0x04068da6c83afcfa0e13ba15a6696662335d5b75',
-    usdcFtmOriLp: '0x50Cc648E45B84D68405BA0707e94c507b08e593d'
+    usdcFtmOriLp: '0x50Cc648E45B84D68405BA0707e94c507b08e593d',
+    esterStakingChef: '0x78e9D247541ff7c365b50D2eE0defdd622016498',
+    ester: '0x181f3f22c9a751e2ce673498a03e1fdfc0ebbfb6'
   }
 }
 
