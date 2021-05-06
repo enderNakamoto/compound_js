@@ -17,7 +17,8 @@ const addresses = {
     usdc: '0x04068da6c83afcfa0e13ba15a6696662335d5b75',
     usdcFtmOriLp: '0x50Cc648E45B84D68405BA0707e94c507b08e593d',
     esterStakingChef: '0x78e9D247541ff7c365b50D2eE0defdd622016498',
-    ester: '0x181f3f22c9a751e2ce673498a03e1fdfc0ebbfb6'
+    ester: '0x181f3f22c9a751e2ce673498a03e1fdfc0ebbfb6',
+    spiritFtmLP: '0x30748322b6e34545dbe0788c421886aeb5297789'
   }
 }
 

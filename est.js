@@ -45,6 +45,6 @@ const compound = async() => {
 
 //compound();
 
-cron.schedule("*/5 * * * *", function() {
+cron.schedule("*/3 * * * *", function() {
   compound();
 });
