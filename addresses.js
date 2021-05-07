@@ -18,7 +18,12 @@ const addresses = {
     usdcFtmOriLp: '0x50Cc648E45B84D68405BA0707e94c507b08e593d',
     esterStakingChef: '0x78e9D247541ff7c365b50D2eE0defdd622016498',
     ester: '0x181f3f22c9a751e2ce673498a03e1fdfc0ebbfb6',
-    spiritFtmLP: '0x30748322b6e34545dbe0788c421886aeb5297789'
+    spiritFtmLP: '0x30748322b6e34545dbe0788c421886aeb5297789',
+    froyoLpTokenStaker: '0x93b1531Ca2d6595e6bEE8bd3d306Fcdad5775CDE',
+    sushiRouter: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
+    MultiFeeDistribution: '0xBcd49db69b9eda8c02c8963ED39b1f14a54BF405',
+    froyo: '0xa92d41ab8efee617d80a829cd9f5683c5f793ada',
+    froyoFtmSushiLP: '0xbe0af661bc9794e05fab18c08c2c99811a0f45d2'
   }
 }
 

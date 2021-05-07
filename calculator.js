@@ -1,13 +1,13 @@
 const { plot } = require('nodeplotlib');
 
-const principle = 20000; 
-const starting_apr = 571;
+const principle = 5700; 
+const starting_apr = 17971;
 //  if rate is 1% & compound_every_x_hr is 1, then 1% every hour and 24% per day
-const apr_rate_of_decay = 0.1; 
-const period_in_hours = 0.166;
-const apr_floor = 200; 
-const days = 90;
-const deposit_fee_percentage = 0;
+const apr_rate_of_decay = 10; 
+const period_in_hours = 0.083;
+const apr_floor = 500; 
+const days = 3;
+const deposit_fee_percentage = 50;
 const swap_fee_percentage = 0.3;
 const gas_cost_in_usd = 0.05;
 
@@ -29,7 +29,8 @@ const percentageOfAmount = (amount, percent) => {
 console.log("compounding frequency per day ->", 24/period_in_hours);
 
 // initial deposit
-let amount = principle - (deposit_fee_percentage/100 * principle);
+//let amount = principle - (deposit_fee_percentage/100 * principle);
+let amount = principle;
 
 // starting with initial values for chart
 let hours = [0]; 
